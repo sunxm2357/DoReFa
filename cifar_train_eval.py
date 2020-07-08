@@ -136,7 +136,7 @@ def main():
   for epoch in range(cfg.max_epochs):
     lr_schedu.step(epoch)
     train(epoch)
-    test(epoch, best_acc)
+    best_acc = test(epoch, best_acc)
     torch.save(model.state_dict(), os.path.join(cfg.ckpt_dir, 'checkpoint.t7'))
 
   print('Best acc = %.2f%%' % best_acc)

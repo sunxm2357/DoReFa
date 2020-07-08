@@ -29,6 +29,7 @@ parser.add_argument('--cifar', type=int, default=10)
 
 parser.add_argument('--Wbits', type=int, default=1)
 parser.add_argument('--Abits', type=int, default=32)
+parser.add_argument('--clip_val', type=float, default=1)
 
 parser.add_argument('--lr', type=float, default=0.1)
 parser.add_argument('--wd', type=float, default=1e-4)
@@ -77,7 +78,7 @@ def main():
                                             num_workers=cfg.num_workers)
 
   print('==> Building ResNet..')
-  model = resnet20(wbits=cfg.Wbits, abits=cfg.Abits).cuda()
+  model = resnet20(wbits=cfg.Wbits, abits=cfg.Abits, clip_val=cfg.clip_val).cuda()
 
   optimizer = torch.optim.SGD(model.parameters(), lr=cfg.lr, momentum=0.9, weight_decay=cfg.wd)
   lr_schedu = optim.lr_scheduler.MultiStepLR(optimizer, [82, 122], gamma=0.1)

@@ -32,6 +32,7 @@ parser.add_argument('--pretrain_dir', type=str, default='./ckpt/alexnet_baseline
 
 parser.add_argument('--Wbits', type=int, default=1)
 parser.add_argument('--Abits', type=int, default=2)
+parser.add_argument('--clip_val', type=float, default=1)
 
 parser.add_argument('--lr', type=float, default=0.01)
 parser.add_argument('--wd', type=float, default=5e-4)
@@ -80,7 +81,7 @@ def main():
 
   # create model
   print("=> creating model...")
-  model = AlexNet_Q(wbit=cfg.Wbits, abit=cfg.Abits).cuda()
+  model = AlexNet_Q(wbit=cfg.Wbits, abit=cfg.Abits, clip_val=cfg.clip_val).cuda()
 
   # optionally resume from a checkpoint
   if cfg.pretrain:

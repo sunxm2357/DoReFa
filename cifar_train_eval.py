@@ -113,7 +113,7 @@ def main():
         summary_writer.add_scalar('cls_loss', loss.item(), step)
         summary_writer.add_scalar('learning rate', optimizer.param_groups[0]['lr'], step)
 
-  def test(epoch):
+  def test(epoch, best_acc):
     # pass
     model.eval()
     correct = 0
@@ -127,14 +127,19 @@ def main():
     acc = 100. * correct / len(eval_dataset)
     print('%s------------------------------------------------------ '
           'Precision@1: %.2f%% \n' % (datetime.now(), acc))
+    if acc > best_acc:
+      best_acc = acc
     summary_writer.add_scalar('Precision@1', acc, global_step=epoch)
+    return best_acc
 
+  best_acc = 0
   for epoch in range(cfg.max_epochs):
     lr_schedu.step(epoch)
     train(epoch)
-    test(epoch)
+    test(epoch, best_acc)
     torch.save(model.state_dict(), os.path.join(cfg.ckpt_dir, 'checkpoint.t7'))
 
+  print('Best acc = %.2f%%' % best_acc)
   summary_writer.close()
 
 
